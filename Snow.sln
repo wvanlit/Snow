@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snow", "Snow\Snow.csproj", "{A410BBEA-F232-474A-998E-ED38D0510852}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snow.Tests.Unit", "test\Snow.Tests.Unit\Snow.Tests.Unit.csproj", "{29440AF1-5EC0-4D54-AA22-1465A9E1AF72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snow.Core", "src\Snow.Core\Snow.Core.csproj", "{ADCC50D5-37FF-4B7F-A4D9-F78EFA79ACE4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A410BBEA-F232-474A-998E-ED38D0510852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A410BBEA-F232-474A-998E-ED38D0510852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A410BBEA-F232-474A-998E-ED38D0510852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A410BBEA-F232-474A-998E-ED38D0510852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29440AF1-5EC0-4D54-AA22-1465A9E1AF72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29440AF1-5EC0-4D54-AA22-1465A9E1AF72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29440AF1-5EC0-4D54-AA22-1465A9E1AF72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29440AF1-5EC0-4D54-AA22-1465A9E1AF72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADCC50D5-37FF-4B7F-A4D9-F78EFA79ACE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADCC50D5-37FF-4B7F-A4D9-F78EFA79ACE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADCC50D5-37FF-4B7F-A4D9-F78EFA79ACE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADCC50D5-37FF-4B7F-A4D9-F78EFA79ACE4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal
