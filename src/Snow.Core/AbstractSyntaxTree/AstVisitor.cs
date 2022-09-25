@@ -1,4 +1,5 @@
-﻿using Snow.Core.Extensions;
+﻿using System.Linq.Expressions;
+using Snow.Core.Extensions;
 
 namespace Snow.Core.AbstractSyntaxTree;
 
@@ -14,7 +15,8 @@ public static class AstEvaluationVisitor
             Call c => EvalCall(c, env),
             Lambda l => EvalLambda(l, env),
             ListFunction l => EvalListFunction(l, env),
-            _ => throw new ArgumentOutOfRangeException(nameof(expression), expression, null)
+            Cons c => EvalCons(c, env),
+            _ => throw new ArgumentOutOfRangeException(nameof(expression), expression, $"{nameof(AstEvaluationVisitor)} does not support {expression.GetType()}")
         };
 
     private static Closure EvalLambda(Lambda l, Environment env) => new(l, env);
@@ -67,4 +69,7 @@ public static class AstEvaluationVisitor
             throw new Exception($"Operator '{listFunction.Operator}' not found for {type} type");
         }
     }
+
+    private static Value EvalCons(Cons cons, Environment env) =>
+        new Pair(Eval(cons.Left, env)!, Eval(cons.Right, env)!);
 }

@@ -21,15 +21,17 @@ A simple Scheme inspired Lisp dialect written in C#
 - [ ] Values
   - [x] Boolean `(|| #t #f)`
   - [x] Number `(* 1 1.4 -2.1)`
-  - [x] Closure 
+  - [x] Closure
+  - [x] Pairs `(cons 1 2) => (1 . 2)`
+  - [ ] Lists `(list 1 2 3) => (1 . (2 . 3))`
   - [ ] Strings
-  - [ ] Lists
   - [ ] Vectors
 - [ ] Special Forms
   - [x] Lambda
   - [x] List Function `(- 1 2 3)`
   - [x] Definitions
   - [x] Conditionals
+  - [ ] Pair functions `(car (cons 1 2)) => 1` and `(cdr (cons 1 2)) => 2`
   - [ ] Quote
   - [ ] Sequencing
   - [ ] Iteration

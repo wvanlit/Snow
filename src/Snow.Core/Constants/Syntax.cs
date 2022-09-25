@@ -18,6 +18,7 @@ public static class Syntax
     public const string Lambda = "lambda";
     public const string IfOperator = "if";
     public const string Define = "define";
+    public const string Cons = "cons";
 
     public const string True = "#t";
     public const string False = "#f";

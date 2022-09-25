@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using Snow.Core;
 using Snow.Core.AbstractSyntaxTree;
+using Snow.Core.Extensions;
 using Snow.Core.Parser;
 using Xunit;
+using Environment = Snow.Core.AbstractSyntaxTree.Environment;
 
 namespace Snow.Tests.Unit;
 
@@ -56,6 +57,43 @@ public class EvaluationTests
     }
 
     [Theory]
+    [InlineData("\"abc\"", "abc")]
+    [InlineData("\"abcdefghijklmnopqrstuvwxyz\"", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("\"λ . 💀\"", "λ . 💀")]
+    public void GivenString_WhenEvaluating_EvaluatesCorrectly(string code, string expected)
+    {
+        var value = ParseAndEvaluate(code, new Environment());
+        Assert.Equal(expected, value.GetValue<string>());
+    }
+
+    [Theory]
+    [MemberData(nameof(PairTestData))]
+    public void GivenPair_WhenEvaluating_EvaluatesCorrectly(string code, Pair expected)
+    {
+        var value = ParseAndEvaluate(code, new Environment());
+        Assert.Equal(expected, value);
+    }
+
+    public static readonly TheoryData<string, Pair> PairTestData = new()
+    {
+        {"(cons 1 2)", PairFromList(new[] {1, 2}.SelectToList(d => (Value) new Number(d)))},
+        {"(cons 1 (cons 2 3))", PairFromList(new[] {1, 2, 3}.SelectToList(d => (Value) new Number(d)))},
+        {
+            "(cons 1 (cons 2 (cons 3 (cons 4 (cons 5 6)))))",
+            PairFromList(new[] {1, 2, 3, 4, 5, 6}.SelectToList(d => (Value) new Number(d)))
+        }
+    };
+
+    public static Pair PairFromList(List<Value> values)
+    {
+        Value RecursiveBuilder(List<Value> v) =>
+            v.Count <= 1 ? v.Pop() : new Pair(v.Pop(), RecursiveBuilder(v));
+
+        return new Pair(values.Pop(), RecursiveBuilder(values));
+    }
+
+
+    [Theory]
     [InlineData("#t", true)]
     [InlineData("#f", false)]
     [InlineData("6", 6d)]
@@ -102,6 +140,7 @@ public class EvaluationTests
 
         Assert.Equal(expected, result.GetValue<object>());
     }
+
 
     private static Value ParseAndEvaluate(string code, Environment env) =>
         AstEvaluationVisitor.Eval(Ast.From(Parser.Parse(code)), env)!;

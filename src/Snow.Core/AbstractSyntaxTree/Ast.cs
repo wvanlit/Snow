@@ -42,6 +42,7 @@ public static class Ast
                 Syntax.Lambda => AsLambda(root),
                 Syntax.IfOperator => AsIf(root),
                 Syntax.Define => AsDefine(root),
+                Syntax.Cons => AsCons(root),
                 _ => AsCall(root, head)
             },
             _ => throw new Exception($"No valid expression found for: {head}")
@@ -70,7 +71,7 @@ public static class Ast
 
     private static If AsIf(SExpList root)
     {
-        Require(root.Contents.Count == 3, "'if' statements should be followed by 3 expressions");
+        Require(root.Contents.Count == 3, "'if' statements should be followed by exactly 3 expressions");
 
         var parameters = root.Contents.SelectToList(From);
 
@@ -84,5 +85,13 @@ public static class Ast
         var atom = (SExpAtom) root.Contents.Pop();
 
         return new Define(atom.Token, From(root.Contents.Pop()));
+    }
+
+    private static Cons AsCons(SExpList root)
+    {
+        Require(root.Contents.Count == 2, "'cons' statements should be followed by exactly 2 expressions");
+
+        var parameters = root.Contents.SelectToList(From);
+        return new Cons(parameters[0], parameters[1]);
     }
 }
