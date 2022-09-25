@@ -1,7 +1,10 @@
 ﻿using Snow.Core;
+using Snow.Core.AbstractSyntaxTree;
+using Snow.Core.Parser;
 using Spectre.Console;
+using Environment = Snow.Core.AbstractSyntaxTree.Environment;
 
-var env = new Dictionary<string, Expression>();
+var env = new Environment();
 
 _ = Eval(
     @"
@@ -17,4 +20,4 @@ _ = Eval(
 
 AnsiConsole.WriteLine($"> {Eval("(fib 25)").GetValue<object>()}");
 
-Value Eval(string code) => AST.From(Parser.Parse(code)).Evaluate(env);
+Value Eval(string code) => AstEvaluationVisitor.Eval(Ast.From(Parser.Parse(code)), env)!;

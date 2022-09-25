@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Snow.Core;
+using Snow.Core.AbstractSyntaxTree;
+using Snow.Core.Parser;
 using Xunit;
 
 namespace Snow.Tests.Unit;
@@ -18,9 +20,9 @@ public class EvaluationTests
     [InlineData("(/ 8 2 2)", 2.0)]
     public void GivenNumberOperatorExpression_WhenEvaluating_ReturnsRightNumber(string code, double expected)
     {
-        var env = new Dictionary<string, Expression>();
+        var env = new Environment();
         var expression = Parser.Parse(code);
-        var val = AST.From(expression).Evaluate(env).GetValue<double>();
+        var val = AstEvaluationVisitor.Eval(Ast.From(expression), env).GetValue<double>();
 
         Assert.Equal(expected, val);
     }
@@ -44,9 +46,9 @@ public class EvaluationTests
     [InlineData("(!= #f #f)", false)]
     public void GivenEqualityOperatorExpression_WhenEvaluating_ReturnsRightBool(string code, bool expected)
     {
-        var env = new Dictionary<string, Expression>();
+        var env = new Environment();
         var expression = Parser.Parse(code);
-        var val = AST.From(expression).Evaluate(env).GetValue<bool>();
+        var val = AstEvaluationVisitor.Eval(Ast.From(expression), env).GetValue<bool>();
 
         Assert.Equal(expected, val);
     }
@@ -60,12 +62,12 @@ public class EvaluationTests
     [InlineData("(!= 10.5 10)", true)]
     public void GivenDefinition_WhenEvaluating_AssignsValueCorrectly(string code, object value)
     {
-        var env = new Dictionary<string, Expression>();
+        var env = new Environment();
         var expression = Parser.Parse($"( define x {code})");
-        var result = AST.From(expression).Evaluate(env);
+        var result = AstEvaluationVisitor.Eval(Ast.From(expression), env);
 
         Assert.True(result is null);
-        Assert.Equal(value, env["x"].Evaluate(env).GetValue<object>());
+        Assert.Equal(value, AstEvaluationVisitor.Eval(env["x"], env).GetValue<object>());
     }
 
     [Theory]
@@ -75,14 +77,14 @@ public class EvaluationTests
     [InlineData("(lambda (y) (= #f y))", "#f", true)]
     public void GivenLambda_WhenEvaluatingCall_ReturnsCorrectValue(string lambda, string args, object value)
     {
-        var env = new Dictionary<string, Expression>();
-        var expression = Parser.Parse($"( define x {lambda} )");
+        var env = new Environment();
+        var expression = Parser.Parse($"( define x {lambda})");
 
-        var result = AST.From(expression).Evaluate(env);
+        var result = AstEvaluationVisitor.Eval(Ast.From(expression), env);
         Assert.True(result is null);
 
         expression = Parser.Parse($"(x {args})");
-        result = AST.From(expression).Evaluate(env);
+        result = AstEvaluationVisitor.Eval(Ast.From(expression), env);
         Assert.Equal(value, result.GetValue<object>());
     }
 }

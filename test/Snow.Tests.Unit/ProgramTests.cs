@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Snow.Core;
+using Snow.Core.AbstractSyntaxTree;
+using Snow.Core.Parser;
 using Xunit;
 
 namespace Snow.Tests.Unit;
@@ -20,7 +22,7 @@ public class ProgramTests
     [InlineData(10, 55)]
     public void GivenAFibonacciSequenceLambda_WhenEvaluating_ReturnsCorrectAnswer(double input, double expected)
     {
-        var env = new Dictionary<string, Expression>();
+        var env = new Environment();
         _ = Eval(
             @"
 (define fib (lambda (n) 
@@ -38,5 +40,5 @@ public class ProgramTests
         Assert.Equal(expected, actual);
     }
 
-    private static Value Eval(string code, Dictionary<string, Expression> env) => AST.From(Parser.Parse(code)).Evaluate(env);
+    private static Value Eval(string code, Environment env) => AstEvaluationVisitor.Eval(Ast.From(Parser.Parse(code)), env)!;
 }

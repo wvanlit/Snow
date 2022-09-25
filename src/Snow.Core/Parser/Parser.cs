@@ -1,6 +1,6 @@
 ﻿using Snow.Core.Extensions;
 
-namespace Snow.Core;
+namespace Snow.Core.Parser;
 
 public static class Parser
 {
