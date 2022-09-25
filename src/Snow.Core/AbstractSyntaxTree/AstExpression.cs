@@ -1,6 +1,4 @@
-﻿using Snow.Core.Extensions;
-
-namespace Snow.Core.AbstractSyntaxTree;
+﻿namespace Snow.Core.AbstractSyntaxTree;
 
 public abstract record AstExpression;
 
