@@ -43,7 +43,9 @@ public static class Ast
                 Syntax.IfOperator => AsIf(root),
                 Syntax.Define => AsDefine(root),
                 Syntax.Cons => AsCons(root),
-                _ => AsCall(root, head)
+                Syntax.Car => AsCar(root),
+                Syntax.Cdr => AsCdr(root),
+                _ => AsCall(root, head),
             },
             _ => throw new Exception($"No valid expression found for: {head}")
         };
@@ -92,6 +94,11 @@ public static class Ast
         Require(root.Contents.Count == 2, "'cons' statements should be followed by exactly 2 expressions");
 
         var parameters = root.Contents.SelectToList(From);
+
         return new Cons(parameters[0], parameters[1]);
     }
+
+    private static Car AsCar(SExpList root) => new Car(From(root.Contents.Pop()));
+
+    private static Cdr AsCdr(SExpList root) => new Cdr(From(root.Contents.Pop()));
 }

@@ -15,3 +15,7 @@ public record ListFunction(string Operator, List<AstExpression> Arguments) : Ast
 public record Variable(string Name) : AstExpression;
 
 public record Cons(AstExpression Left, AstExpression Right) : AstExpression;
+
+public record Car(AstExpression Expression) : AstExpression;
+
+public record Cdr(AstExpression Expression) : AstExpression;

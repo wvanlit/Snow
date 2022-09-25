@@ -31,7 +31,7 @@ A simple Scheme inspired Lisp dialect written in C#
   - [x] List Function `(- 1 2 3)`
   - [x] Definitions
   - [x] Conditionals
-  - [ ] Pair functions `(car (cons 1 2)) => 1` and `(cdr (cons 1 2)) => 2`
+  - [x] Pair functions `(car (cons 1 2)) => 1` and `(cdr (cons 1 2)) => 2`
   - [ ] Quote
   - [ ] Sequencing
   - [ ] Iteration

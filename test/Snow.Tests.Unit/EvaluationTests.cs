@@ -81,16 +81,24 @@ public class EvaluationTests
         {
             "(cons 1 (cons 2 (cons 3 (cons 4 (cons 5 6)))))",
             PairFromList(new[] {1, 2, 3, 4, 5, 6}.SelectToList(d => (Value) new Number(d)))
-        }
+        },
+        {"(cons #t 2)", PairFromList(new List<Value> {new Bool(true), new Number(2)})},
     };
 
-    public static Pair PairFromList(List<Value> values)
+    [Theory]
+    [MemberData(nameof(PairFunctionTestData))]
+    public void GivenPairFunction_WhenEvaluating_ReturnCorrectValue(string code, Value expected)
     {
-        Value RecursiveBuilder(List<Value> v) =>
-            v.Count <= 1 ? v.Pop() : new Pair(v.Pop(), RecursiveBuilder(v));
-
-        return new Pair(values.Pop(), RecursiveBuilder(values));
+        var value = ParseAndEvaluate(code, new Environment());
+        Assert.Equal(expected, value);
     }
+
+    public static readonly TheoryData<string, Value> PairFunctionTestData = new()
+    {
+        {"(car (cons 1 2))", new Number(1)},
+        {"(cdr (cons 1 2))", new Number(2)},
+        {"(cdr (cons 1 (cons 2 3)))", new Pair(new Number(2), new Number(3))},
+    };
 
 
     [Theory]
@@ -144,4 +152,11 @@ public class EvaluationTests
 
     private static Value ParseAndEvaluate(string code, Environment env) =>
         AstEvaluationVisitor.Eval(Ast.From(Parser.Parse(code)), env)!;
+
+    private static Pair PairFromList(List<Value> values)
+    {
+        return new Pair(values.Pop(), BuildPair(values));
+
+        Value BuildPair(List<Value> v) => v.Count <= 1 ? v.Pop() : new Pair(v.Pop(), BuildPair(v));
+    }
 }
