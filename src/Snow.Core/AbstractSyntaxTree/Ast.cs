@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Snow.Core.Constants;
+﻿using Snow.Core.Constants;
 using Snow.Core.Extensions;
 using Snow.Core.Parser;
 using static Snow.Core.Helpers.Requirements;
@@ -50,10 +49,9 @@ public static class Ast
     }
 
     private static ListFunction AsListFunction(SExpList root, string token) =>
-        new ListFunction(token, root.Contents.SelectToList(From));
+        new(token, root.Contents.SelectToList(From));
 
-    private static Call AsCall(SExpList root, SExp body) =>
-        new Call(From(body), root.Contents.SelectToList(From));
+    private static Call AsCall(SExpList root, SExp body) => new(From(body), root.Contents.SelectToList(From));
 
     private static Lambda AsLambda(SExpList root)
     {

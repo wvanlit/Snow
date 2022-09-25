@@ -14,10 +14,7 @@ public static class ListExtensions
 
     public static List<List<T>> SlidingWindow<T>(this List<T> input, int windowSize)
     {
-        if (input.Count < windowSize)
-        {
-            return new List<List<T>>();
-        }
+        if (input.Count < windowSize) return new List<List<T>>();
 
         var first = new[] {input.Take(windowSize).ToList()};
         var rest = SlidingWindow(input.Skip(1).ToList(), windowSize);

@@ -18,16 +18,20 @@ public static class Parser
 
     private static SExp Next(List<string> tokens)
     {
-        var token = tokens.PopAt(0);
+        var token = tokens.Pop();
         switch (token)
         {
             case ")":
-                throw new Exception("Unexpected '(' character");
+                throw new Exception("Unexpected ')' character");
             case "(":
                 var list = new SExpList();
                 while (tokens.First() != ")")
+                {
                     list.Contents.Add(Next(tokens));
-                tokens.PopAt(0);
+                }
+
+                tokens.Pop();
+
                 return list;
             default:
                 return new SExpAtom(token);

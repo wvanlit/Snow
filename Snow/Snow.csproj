@@ -9,11 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Spectre.Console" Version="0.45.0" />
+        <PackageReference Include="Spectre.Console" Version="0.45.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Snow.Core\Snow.Core.csproj" />
+        <ProjectReference Include="..\src\Snow.Core\Snow.Core.csproj"/>
     </ItemGroup>
 
 </Project>

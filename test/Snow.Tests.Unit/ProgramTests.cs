@@ -40,5 +40,6 @@ public class ProgramTests
         Assert.Equal(expected, actual);
     }
 
-    private static Value Eval(string code, Environment env) => AstEvaluationVisitor.Eval(Ast.From(Parser.Parse(code)), env)!;
+    private static Value Eval(string code, Environment env) =>
+        AstEvaluationVisitor.Eval(Ast.From(Parser.Parse(code)), env)!;
 }
