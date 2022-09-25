@@ -46,10 +46,7 @@ public class EvaluationTests
     [InlineData("(!= #f #f)", false)]
     public void GivenEqualityOperatorExpression_WhenEvaluating_ReturnsRightBool(string code, bool expected)
     {
-        var env = new Environment();
-        var expression = Parser.Parse(code);
-        var val = AstEvaluationVisitor.Eval(Ast.From(expression), env).GetValue<bool>();
-
+        var val = ParseAndEvaluate(code, new Environment()).GetValue<bool>();
         Assert.Equal(expected, val);
     }
 
@@ -63,11 +60,13 @@ public class EvaluationTests
     public void GivenDefinition_WhenEvaluating_AssignsValueCorrectly(string code, object value)
     {
         var env = new Environment();
-        var expression = Parser.Parse($"( define x {code})");
-        var result = AstEvaluationVisitor.Eval(Ast.From(expression), env);
+        var result = ParseAndEvaluate($"(define x {code})", env);
 
         Assert.True(result is null);
-        Assert.Equal(value, AstEvaluationVisitor.Eval(env["x"], env).GetValue<object>());
+
+        result = AstEvaluationVisitor.Eval(env["x"], env)!;
+
+        Assert.Equal(value, result.GetValue<object>());
     }
 
     [Theory]
@@ -78,13 +77,27 @@ public class EvaluationTests
     public void GivenLambda_WhenEvaluatingCall_ReturnsCorrectValue(string lambda, string args, object value)
     {
         var env = new Environment();
-        var expression = Parser.Parse($"( define x {lambda})");
 
-        var result = AstEvaluationVisitor.Eval(Ast.From(expression), env);
+        var result = ParseAndEvaluate($"( define x {lambda})", env);
         Assert.True(result is null);
 
-        expression = Parser.Parse($"(x {args})");
-        result = AstEvaluationVisitor.Eval(Ast.From(expression), env);
+        result = ParseAndEvaluate($"(x {args})", env);
         Assert.Equal(value, result.GetValue<object>());
     }
+
+    [Theory]
+    [InlineData("(define λ 2)", "λ", 2.0)]
+    [InlineData("(define μα #f)", "μα", false)]
+    [InlineData("(define 💀 #t)", "💀", true)]
+    public void GivenUnicode_WhenEvaluating_EvaluatesCorrectly(string define, string eval, object expected)
+    {
+        var env = new Environment();
+        _ = ParseAndEvaluate(define, env);
+        var result = ParseAndEvaluate(eval, env);
+
+        Assert.Equal(expected, result.GetValue<object>());
+    }
+
+    private static Value ParseAndEvaluate(string code, Environment env) =>
+        AstEvaluationVisitor.Eval(Ast.From(Parser.Parse(code)), env)!;
 }
