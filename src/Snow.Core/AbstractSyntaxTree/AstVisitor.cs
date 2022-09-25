@@ -51,11 +51,20 @@ public static class AstEvaluationVisitor
     {
         var values = listFunction.Arguments.SelectToList(arg => Eval(arg, env)!);
 
-        return values.First() switch
+        try
         {
-            Number => ListOperations.NumberOperations[listFunction.Operator].EvalList(values),
-            Bool => ListOperations.BooleanOperations[listFunction.Operator].EvalList(values),
-            _ => throw new ArgumentOutOfRangeException(nameof(values), values.First(), null)
-        };
+            return values.First() switch
+            {
+                Number => ListOperations.NumberOperations[listFunction.Operator].EvalList(values),
+                Bool => ListOperations.BooleanOperations[listFunction.Operator].EvalList(values),
+                _ => throw new ArgumentOutOfRangeException(nameof(values), values.First(), null)
+            };
+        }
+        catch (KeyNotFoundException _)
+        {
+            var type = values.First().GetType().ToString().Split(".").Last();
+
+            throw new Exception($"Operator '{listFunction.Operator}' not found for {type} type");
+        }
     }
 }

@@ -20,11 +20,8 @@ public class EvaluationTests
     [InlineData("(/ 8 2 2)", 2.0)]
     public void GivenNumberOperatorExpression_WhenEvaluating_ReturnsRightNumber(string code, double expected)
     {
-        var env = new Environment();
-        var expression = Parser.Parse(code);
-        var val = AstEvaluationVisitor.Eval(Ast.From(expression), env).GetValue<double>();
-
-        Assert.Equal(expected, val);
+        var val = ParseAndEvaluate(code, new Environment());
+        Assert.Equal(expected, val.GetValue<double>());
     }
 
     [Theory]
@@ -44,10 +41,18 @@ public class EvaluationTests
     [InlineData("(= #t #f)", false)]
     [InlineData("(!= #t #f)", true)]
     [InlineData("(!= #f #f)", false)]
+    [InlineData("(&& #f #f)", false)]
+    [InlineData("(&& #f #t)", false)]
+    [InlineData("(&& #t #t)", true)]
+    [InlineData("(|| #f #f)", false)]
+    [InlineData("(|| #f #t)", true)]
+    [InlineData("(|| #t #t)", true)]
+    [InlineData("(&& (|| #t #t) (> 5 3))", true)]
+    [InlineData("(= (+ 5 5) (/ 100 10) (* 2 5))", true)]
     public void GivenEqualityOperatorExpression_WhenEvaluating_ReturnsRightBool(string code, bool expected)
     {
-        var val = ParseAndEvaluate(code, new Environment()).GetValue<bool>();
-        Assert.Equal(expected, val);
+        var val = ParseAndEvaluate(code, new Environment());
+        Assert.Equal(expected, val.GetValue<bool>());
     }
 
     [Theory]

@@ -19,13 +19,16 @@ public static class ListOperations
         {GreaterThanOrEqual, new ConditionalListOperation<double>((prev, curr) => prev >= curr)},
 
         {EqualsTo, new ConditionalListOperation<double>((prev, curr) => Math.Abs(prev - curr) < 0.0001)},
-        {NotEqualsTo, new ConditionalListOperation<double>((prev, curr) => Math.Abs(prev - curr) > 0.0001)},
+        {NotEqualsTo, new ConditionalListOperation<double>((prev, curr) => Math.Abs(prev - curr) > 0.0001)}
     };
 
     public static readonly Dictionary<string, ListOperation> BooleanOperations = new()
     {
         {EqualsTo, new ConditionalListOperation<bool>((prev, curr) => prev == curr)},
         {NotEqualsTo, new ConditionalListOperation<bool>((prev, curr) => prev != curr)},
+
+        {And, new ConditionalListOperation<bool>((prev, curr) => prev && curr)},
+        {Or, new ConditionalListOperation<bool>((prev, curr) => prev || curr)}
     };
 }
 
